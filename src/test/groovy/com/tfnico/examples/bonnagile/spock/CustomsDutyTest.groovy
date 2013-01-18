@@ -4,15 +4,25 @@ import spock.lang.Specification
 
 class CustomsDutyTest extends Specification {
 
-    def "test some java code"(){
+    private CustomsDutyService service
+
+    def "look up case by id"(){
         setup:
-        CustomsDutyService service = new CustomsDutyService()
+        service = new CustomsDutyService()
 
-        when:
-        true
-
-        then:
-        true
-
+        this.service = service
+        expect:
+        this.service.findCase("abcd") != null
     }
+
+    def "case should have same amountToPay as when saved"(){
+
+        setup:
+        service = new CustomsDutyService()
+        service.saveCase("abcd", 500)
+
+        expect:
+        service.findCase("abcd").amountToPay == 500
+    }
+
 }
