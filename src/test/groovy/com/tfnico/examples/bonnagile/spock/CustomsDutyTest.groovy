@@ -5,24 +5,46 @@ import spock.lang.Specification
 class CustomsDutyTest extends Specification {
 
     private CustomsDutyService service
+    private DutyRepository repository
+
+    def setup() {
+        repository = Stub(DutyRepository)
+        service = new CustomsDutyService(repository)
+    }
 
     def "look up case by id"(){
         setup:
-        service = new CustomsDutyService()
+        service.saveCase("abcd", 0)
 
-        this.service = service
         expect:
-        this.service.findCase("abcd") != null
+        service.findCase("abcd") != null
+    }
+
+    def "should not look up wrong case"(){
+        repository.findById("abcd") >> null
+        service.saveCase("123ab", 0)
+
+        expect:
+        service.findCase("abcd") == null
+
     }
 
     def "case should have same amountToPay as when saved"(){
-
         setup:
-        service = new CustomsDutyService()
+        repository.findById(_) >> new Case(500)
+        when:
         service.saveCase("abcd", 500)
 
-        expect:
+        then:
         service.findCase("abcd").amountToPay == 500
+    }
+
+    def "register case by value for present"() {
+        setup:
+        String caseId = service.registerCase(30, CaseType.PRESENT)
+
+        expect:
+        service.findCase(caseId).amountToPay == 0
     }
 
 }
