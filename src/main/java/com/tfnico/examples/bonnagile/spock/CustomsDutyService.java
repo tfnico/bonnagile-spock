@@ -3,9 +3,12 @@ package com.tfnico.examples.bonnagile.spock;
 class CustomsDutyService {
 
     private final ParcelRepository repository;
+    private final Notifier notifier;
 
-    CustomsDutyService(ParcelRepository repository) {
+    CustomsDutyService(ParcelRepository repository,
+                       Notifier notifier) {
         this.repository = repository;
+        this.notifier = notifier;
     }
 
     int getAmountToPay(String parcelId) {
@@ -19,9 +22,9 @@ class CustomsDutyService {
         return repository.findById(parcelId);
     }
 
-    public String registerParcel(int value, ParcelType type) {
+    public String registerParcel(int value, ParcelType type, String recipientEmail) {
         Parcel parcel = new Parcel(value, type);
-        //todo: generate id
+        notifier.notifyParcelArrived(recipientEmail);
         return repository.save(parcel);
     }
 }
