@@ -8,21 +8,19 @@ class CustomsDutyService {
         this.repository = repository;
     }
 
-    static int getAmountToPay(Parcel parcel, ParcelType parcelType) {
-        return parcel.getValue();
+    int getAmountToPay(String parcelId) {
+        Parcel parcel = repository.findById(parcelId);
+        ParcelType type = parcel.getType();
+        return type.calculateAmountToPay(parcel.getValue());
     }
+
 
     public Parcel findParcel(String parcelId) {
         return repository.findById(parcelId);
     }
 
-    public void saveParcel(String parcelId, int amountToPay) {
-        Parcel parcel = new Parcel(amountToPay);
-        this.repository.save(parcel);
-    }
-
     public String registerParcel(int value, ParcelType type) {
-        Parcel parcel = new Parcel(0);
+        Parcel parcel = new Parcel(value, type);
         //todo: generate id
         return repository.save(parcel);
     }

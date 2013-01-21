@@ -12,53 +12,28 @@ class CustomsDutyTest extends Specification {
         service = new CustomsDutyService(repository)
     }
 
-    def "look up parcel by id"(){
-        setup:
-        service.saveParcel("abcd", 0)
-
-        expect:
-        service.findParcel("abcd") != null
-    }
-
     def "should not look up wrong parcel"(){
         repository.findById("abcd") >> null
-        service.saveParcel("123ab", 0)
+        service.registerParcel(300, ParcelType.GIFT)
 
         expect:
         service.findParcel("abcd") == null
 
     }
 
-    def "parcel should have same value as when registered"(){
-        setup:
-        repository.findById(_) >> new Parcel(500)
-        when:
-        service.registerParcel(500, ParcelType.COMMERCIAL)
-
-        then:
-        def parcel = service.findParcel("abcd")
-
-        service.getAmountToPay(parcel, ParcelType.COMMERCIAL) == 500
-    }
-
-    def "register parcel by value for gift"() {
+    def "calculate amount to pay for gift"() {
         setup:
         String parcelId = service.registerParcel(30, ParcelType.GIFT)
 
-        def parcel = service.findParcel(parcelId)
         expect:
-        service.getAmountToPay(parcel, ParcelType.GIFT) == 0
+        service.getAmountToPay(parcelId) == 0
     }
 
-    def "register parcel by value for commercial shipment"() {
+    def "calculate amount to pay for commercial"() {
         setup:
-        repository.save(_) >> "abc"
-        repository.findById("abc") >> new Parcel(3)
-        String parcelId = service.registerParcel(30, ParcelType.COMMERCIAL)
+        repository.findById("abc") >> new Parcel(30, ParcelType.COMMERCIAL)
 
-        def parcel = service.findParcel(parcelId)
         expect:
-        service.getAmountToPay(parcel, ParcelType.COMMERCIAL) == 3
+        service.getAmountToPay("abc") == 3
     }
-
 }
