@@ -8,6 +8,10 @@ class CustomsDutyService {
         this.repository = repository;
     }
 
+    static int getAmountToPay(Parcel parcel, ParcelType parcelType) {
+        return parcel.getValue();
+    }
+
     public Parcel findParcel(String parcelId) {
         return repository.findById(parcelId);
     }

@@ -29,22 +29,25 @@ class CustomsDutyTest extends Specification {
 
     }
 
-    def "parcel should have same amountToPay as when saved"(){
+    def "parcel should have same value as when registered"(){
         setup:
         repository.findById(_) >> new Parcel(500)
         when:
-        service.saveParcel("abcd", 500)
+        service.registerParcel(500, ParcelType.COMMERCIAL)
 
         then:
-        service.findParcel("abcd").amountToPay == 500
+        def parcel = service.findParcel("abcd")
+
+        service.getAmountToPay(parcel, ParcelType.COMMERCIAL) == 500
     }
 
     def "register parcel by value for gift"() {
         setup:
         String parcelId = service.registerParcel(30, ParcelType.GIFT)
 
+        def parcel = service.findParcel(parcelId)
         expect:
-        service.findParcel(parcelId).amountToPay == 0
+        service.getAmountToPay(parcel, ParcelType.GIFT) == 0
     }
 
     def "register parcel by value for commercial shipment"() {
@@ -53,8 +56,9 @@ class CustomsDutyTest extends Specification {
         repository.findById("abc") >> new Parcel(3)
         String parcelId = service.registerParcel(30, ParcelType.COMMERCIAL)
 
+        def parcel = service.findParcel(parcelId)
         expect:
-        service.findParcel(parcelId).amountToPay == 3
+        service.getAmountToPay(parcel, ParcelType.COMMERCIAL) == 3
     }
 
 }

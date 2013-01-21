@@ -2,20 +2,20 @@ package com.tfnico.examples.bonnagile.spock;
 
 public class Parcel {
 
-    private int amount;
+    private int value;
 
-    public Parcel(int amountToPay) {
-        this.amount = amountToPay;
+    public int getValue() {
+        return value;
     }
 
-    public int getAmountToPay() {
-        return amount;
+    public Parcel(int value) {
+        this.value = value;
     }
 
     @Override
     public String toString() {
         return "Parcel{" +
-                "amount=" + amount +
+                "value=" + value +
                 '}';
     }
 }
