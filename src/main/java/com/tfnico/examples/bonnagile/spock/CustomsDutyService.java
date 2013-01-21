@@ -12,10 +12,15 @@ class CustomsDutyService {
     }
 
     int getAmountToPay(String parcelId) {
+        lookUpAllowedParcelTypes();
         Parcel parcel = repository.findById(parcelId);
         ParcelType type = parcel.getType();
         //if (parcel.getValue() > 490) return parcel.getValue() + 1;
         return type.calculateAmountToPay(parcel.getValue());
+    }
+
+    void lookUpAllowedParcelTypes() {
+        //just for testing interaction
     }
 
 
