@@ -1,6 +1,6 @@
 package com.tfnico.examples.bonnagile.spock;
 
 
-public enum CaseType {
-    PRESENT, COMMERCIAL;
+public enum ParcelType {
+    GIFT, COMMERCIAL;
 }

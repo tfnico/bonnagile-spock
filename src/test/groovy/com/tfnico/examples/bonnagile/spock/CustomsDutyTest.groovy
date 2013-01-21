@@ -5,56 +5,56 @@ import spock.lang.Specification
 class CustomsDutyTest extends Specification {
 
     private CustomsDutyService service
-    private DutyRepository repository
+    private ParcelRepository repository
 
     def setup() {
-        repository = Stub(DutyRepository)
+        repository = Stub(ParcelRepository)
         service = new CustomsDutyService(repository)
     }
 
-    def "look up case by id"(){
+    def "look up parcel by id"(){
         setup:
-        service.saveCase("abcd", 0)
+        service.saveParcel("abcd", 0)
 
         expect:
-        service.findCase("abcd") != null
+        service.findParcel("abcd") != null
     }
 
-    def "should not look up wrong case"(){
+    def "should not look up wrong parcel"(){
         repository.findById("abcd") >> null
-        service.saveCase("123ab", 0)
+        service.saveParcel("123ab", 0)
 
         expect:
-        service.findCase("abcd") == null
+        service.findParcel("abcd") == null
 
     }
 
-    def "case should have same amountToPay as when saved"(){
+    def "parcel should have same amountToPay as when saved"(){
         setup:
-        repository.findById(_) >> new Case(500)
+        repository.findById(_) >> new Parcel(500)
         when:
-        service.saveCase("abcd", 500)
+        service.saveParcel("abcd", 500)
 
         then:
-        service.findCase("abcd").amountToPay == 500
+        service.findParcel("abcd").amountToPay == 500
     }
 
-    def "register case by value for present"() {
+    def "register parcel by value for gift"() {
         setup:
-        String caseId = service.registerCase(30, CaseType.PRESENT)
+        String parcelId = service.registerParcel(30, ParcelType.GIFT)
 
         expect:
-        service.findCase(caseId).amountToPay == 0
+        service.findParcel(parcelId).amountToPay == 0
     }
 
-    def "register case by value for commercial shipment"() {
+    def "register parcel by value for commercial shipment"() {
         setup:
         repository.save(_) >> "abc"
-        repository.findById("abc") >> new Case(3)
-        String caseId = service.registerCase(30, CaseType.COMMERCIAL)
+        repository.findById("abc") >> new Parcel(3)
+        String parcelId = service.registerParcel(30, ParcelType.COMMERCIAL)
 
         expect:
-        service.findCase(caseId).amountToPay == 3
+        service.findParcel(parcelId).amountToPay == 3
     }
 
 }

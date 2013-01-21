@@ -2,24 +2,24 @@ package com.tfnico.examples.bonnagile.spock;
 
 class CustomsDutyService {
 
-    private final DutyRepository repository;
+    private final ParcelRepository repository;
 
-    CustomsDutyService(DutyRepository repository) {
+    CustomsDutyService(ParcelRepository repository) {
         this.repository = repository;
     }
 
-    public Case findCase(String caseId) {
-        return repository.findById(caseId);
+    public Parcel findParcel(String parcelId) {
+        return repository.findById(parcelId);
     }
 
-    public void saveCase(String caseId, int amountToPay) {
-        Case caze = new Case(amountToPay);
-        this.repository.save(caze);
+    public void saveParcel(String parcelId, int amountToPay) {
+        Parcel parcel = new Parcel(amountToPay);
+        this.repository.save(parcel);
     }
 
-    public String registerCase(int value, CaseType type) {
-        Case caze = new Case(0);
+    public String registerParcel(int value, ParcelType type) {
+        Parcel parcel = new Parcel(0);
         //todo: generate id
-        return repository.save(caze);
+        return repository.save(parcel);
     }
 }

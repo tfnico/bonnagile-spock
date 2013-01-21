@@ -1,10 +1,10 @@
 package com.tfnico.examples.bonnagile.spock;
 
-public class Case {
+public class Parcel {
 
     private int amount;
 
-    public Case(int amountToPay) {
+    public Parcel(int amountToPay) {
         this.amount = amountToPay;
     }
 
@@ -14,7 +14,7 @@ public class Case {
 
     @Override
     public String toString() {
-        return "Case{" +
+        return "Parcel{" +
                 "amount=" + amount +
                 '}';
     }
