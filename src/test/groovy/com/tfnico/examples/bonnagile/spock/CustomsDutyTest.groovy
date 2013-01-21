@@ -47,4 +47,14 @@ class CustomsDutyTest extends Specification {
         service.findCase(caseId).amountToPay == 0
     }
 
+    def "register case by value for commercial shipment"() {
+        setup:
+        repository.save(_) >> "abc"
+        repository.findById("abc") >> new Case(3)
+        String caseId = service.registerCase(30, CaseType.COMMERCIAL)
+
+        expect:
+        service.findCase(caseId).amountToPay == 3
+    }
+
 }

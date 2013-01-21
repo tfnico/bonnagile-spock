@@ -19,6 +19,7 @@ class CustomsDutyService {
 
     public String registerCase(int value, CaseType type) {
         Case caze = new Case(0);
+        //todo: generate id
         return repository.save(caze);
     }
 }
